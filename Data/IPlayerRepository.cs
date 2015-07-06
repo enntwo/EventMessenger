@@ -13,5 +13,6 @@ namespace Data
 
         void SavePlayers();
         void AddPlayer(Player player);
+        Player GetPlayer(string dci);
     }
 }

@@ -12,11 +12,11 @@ namespace Data
         public string RoundText;
         public bool IsRepair;
 
-        public List<Tuple<Player, Player>> Pairings;
+        public List<Tuple<Player, Player, string>> Pairings;
  
         public Pairing() 
         {
-            Pairings = new List<Tuple<Player, Player>>();
+            Pairings = new List<Tuple<Player, Player, string>>();
         }
     }
 }

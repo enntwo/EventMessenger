@@ -14,6 +14,7 @@ namespace EventMessenger
     public class PostPairingsViewModel : ObservableObject
     {
         public DelegateCommand BrowseCommand { get; set; }
+        private readonly PlayerRepository _playerRepository;
 
         private string _selectedFilePath;
         public string SelectedFilePath
@@ -53,8 +54,9 @@ namespace EventMessenger
             }
         }
 
-        public PostPairingsViewModel() : base()
+        public PostPairingsViewModel(PlayerRepository playerRepository) : base()
         {
+            _playerRepository = playerRepository;
             InitializeCommands();
         }
 
@@ -105,11 +107,29 @@ namespace EventMessenger
             {
                 pairing.EventName = lines[2].Substring(7);
                 pairing.RoundText = lines[3];
+
+                var pairs = lines.Skip(6).TakeWhile(l => !l.StartsWith("Wizards Event Reporter"));
+                foreach(var pair in pairs)
+                {
+                    string message = "Table {0}: {1}({2}) vs. {3}({4}) [{5}]";
+                    var parts = pair.Split(new[] { "   " }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < parts.Length; i++)
+                    {
+                        parts[i] = parts[i].Trim();
+                    }
+
+                    var player1 = _playerRepository.GetPlayer(parts[2]);
+                    var player2 = _playerRepository.GetPlayer(parts[4]);
+
+                    message = string.Format(message, parts);
+
+                    pairing.Pairings.Add(new Tuple<Player, Player, string>(player1, player2, message));
+                }
             }
             catch(Exception e)
             {
                  MessageBox.Show("Unable to import pairings. \n Make sure the file is the proper format (.xps).");
-                return;
+                 return;
             }
 
             PutPairingInContext(pairing);

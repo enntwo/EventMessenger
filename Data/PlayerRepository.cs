@@ -73,5 +73,10 @@ namespace Data
                     // Couldn't save serialized file.
             }
         }
+
+        public Player GetPlayer(string dci)
+        {
+            return AllPlayers.FirstOrDefault(player => player.DCINumber == dci);
+        }
     }
 }
