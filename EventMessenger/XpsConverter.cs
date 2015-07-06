@@ -9,6 +9,7 @@ namespace EventMessenger
 {
     public class XpsConverter
     {
+        // Test
         public static string ExtractText(string path)
         {
             XpsDocument _xpsDocument = new XpsDocument(path, System.IO.FileAccess.Read);
